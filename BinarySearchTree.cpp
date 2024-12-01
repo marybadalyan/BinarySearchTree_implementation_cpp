@@ -38,22 +38,57 @@ public:
                 }
                 else tmp = tmp->left;
             }
-            else break;  //don't allow duplicates break in case there is more to be executed 
+            else break;  // Don't allow duplicates. Break in case there is more to be executed.
         }
     }
     void insertRecursive(const T& value){
-        tree_root = insertRecursive(tree_root,value);
+        tree_root = insertRecursiveHelper(tree_root, value);
     }
     
-    void eraseIterative(const T& v){
+    void eraseRecursive(const T& val){
+        tree_root = eraseRecursiveHelper(val, tree_root);
+    }
+    TreeNode<T>* eraseRecursiveHelper(const T& val, TreeNode<T>* root){
+        if(root == nullptr) return nullptr;
+
+        if(val > root->value){
+            root->right = eraseRecursiveHelper(val, root->right);
+        }
+        else if(val < root->value){
+            root->left = eraseRecursiveHelper(val, root->left);
+        }
+        else{
+            if(root->left == nullptr && root->right == nullptr){
+                delete root;
+                return nullptr;
+            }
+            if(root->right == nullptr){
+                TreeNode<T>* tmp = root->left;
+                delete root;
+                return tmp;
+            }
+            if(root->left == nullptr){
+                TreeNode<T>* tmp = root->right;
+                delete root;
+                return tmp;
+            }
+
+            TreeNode<T>* min = findMinNode(root->right);
+            root->value = min->value;
+            root->right = eraseRecursiveHelper(root->value, root->right);
+        }
+        
+        return root;
+    }
+    void eraseIterative(const T& val){
         if (isEmpty()) {
             throw std::underflow_error("Cannot erase from an empty tree.");
             return;
         }
-        //the easierst is deleteing a leaf 
+        // The easiest case is deleting a leaf node.
         TreeNode<T>* prev = nullptr;
         TreeNode<T>* curr = tree_root;
-        T value = v; //this might change
+        T value = val; // This might change.
 
         while(curr != nullptr){
 
@@ -65,20 +100,26 @@ public:
                 prev = curr;
                 curr = curr->right;
             }
-            else{
+            else{ // Found the node.
                 if(curr->left == nullptr && curr->right == nullptr){
-                    if(curr->value > prev->value){
+                    if(prev == nullptr){ // We need to delete the root.
+                        tree_root = nullptr;
+                    }
+                    else if(curr->value > prev->value){
                         prev->right = nullptr;
                     }
                     else{
-                        prev->left = nullptr
+                        prev->left = nullptr;
                     }
                     delete curr;
                     curr = nullptr;
                     return;
                 }
-                if(curr->right == nullptr){ // means curr->left isnt null cus the previous condition would have been right
-                    if(curr->value < prev->value){
+                if(curr->right == nullptr){ // Means curr->left isn't null because the previous condition would have been true.
+                    if(prev == nullptr){ // We need to delete the root.
+                        tree_root = nullptr;
+                    }
+                    else if(curr->value < prev->value){
                         prev->left = curr->left;
                     }
                     else{
@@ -90,39 +131,42 @@ public:
                     return;
                 } 
                 if(curr->left == nullptr){
-                    if(curr->value > prev->value){
+                    if(prev == nullptr){ // We need to delete the root.
+                        tree_root = nullptr;
+                    }
+                    else if(curr->value > prev->value){
                         prev->right = curr->right;
                     }
                     else{
                         prev->left = curr->right;
                     }
                 }
-
-                TreeNode<T>* min = FindMinNode(curr->right);
+                // Root is handled here. It'll just get replaced as in case of both, so no other checks need to be made.
+                TreeNode<T>* min = findMinNode(curr->right);
                 curr->value = min->value;
                 value = min->value;
                 prev = curr;
-                curr = curr->right;  //lets find the minimum node and delete it   
+                curr = curr->right;  // Let's find the minimum node and delete it.   
             }
         }
     }
 
-
 private:
-    TreeNode<T>* insertRecursiveHelper(TreeNode<T>*root, constr T& value){ // or you can pass a poiner by reference  without returning every root 
+    TreeNode<T>* insertRecursiveHelper(TreeNode<T>* root, const T& value){ 
+        // Or you can pass a pointer by reference without returning the root each time.
         if(root == nullptr){
            return new TreeNode<T>(value);
         }
         if(value < root->value){
-            root->left= insertRecursiveHelper(root->left,value);
+            root->left = insertRecursiveHelper(root->left, value);
         }
         else if(value > root->value){
-            root->right = insertRecursiveHelper(root->right,value);
+            root->right = insertRecursiveHelper(root->right, value);
         }
 
         return root;
     }
-  
+
 private:
     TreeNode<T>* tree_root;
 };
