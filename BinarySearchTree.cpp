@@ -1,5 +1,5 @@
-#pragma once
 
+#include <iostream>
 #include "TreeNode.h"
 
 template <typename T>
@@ -8,15 +8,13 @@ class BinarySearchTree{
 public:
     BinarySearchTree(TreeNode<T>* r = nullptr): tree_root(r){}
 
-    ~BinarySearchTree(){
-        clear();
-    }
+    ~BinarySearchTree(){}
 
     bool isEmpty(){
         return tree_root == nullptr;
     }
     void insertIterative(const T& val){
-        if (tree_root == nullptr){
+        if (!tree_root){
             tree_root = new TreeNode<T>(val);
             return;
         }
@@ -115,9 +113,8 @@ public:
                     }
                 }
                 // Root is handled here. It'll just get replaced as in case of both, so no other checks need to be made.
-                TreeNode<T>* min = findMinNodeIterative(curr->right);
+                TreeNode<T>* min = findMinNodeRecursiveHelper(curr->right);
                 curr->value = min->value;
-                val = min->value;
                 prev = curr;
                 curr = curr->right;  // Let's find the minimum node and delete it.   
             }
@@ -126,13 +123,13 @@ public:
     
     TreeNode<T>* findMinNodeIterative(){
         TreeNode<T>* tmp = tree_root;
-        while(tmp != nullptr && tmp->left != nullptr){
+        while(tmp && tmp->left){
             tmp = tmp->left;
         }
         return tmp;
     }
     TreeNode<T>* findMinNodeRecursive(){
-        findMinNodeRecursiveHelper(tree_root);
+        return findMinNodeRecursiveHelper(tree_root);
     }
     TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root){
         if(root == nullptr)
@@ -184,9 +181,9 @@ private:
                 return tmp;
             }
 
-            TreeNode<T>* min = findMinNodeRecursive(root->right);
+            TreeNode<T>* min = findMinNodeRecursiveHelper(root->right);
             root->value = min->value;
-            root->right = eraseRecursiveHelper(min->val, root->right);
+            root->right = eraseRecursiveHelper(min->value, root->right);
         }
         
         return root;
@@ -195,3 +192,5 @@ private:
 private:
     TreeNode<T>* tree_root;
 };
+
+
