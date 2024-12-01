@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TreeNode.h"
 
 template <typename T>
@@ -13,73 +15,45 @@ public:
     bool isEmpty(){
         return tree_root == nullptr;
     }
-    void insertIterative(const T& value){
+    void insertIterative(const T& val){
         if (tree_root == nullptr){
-            tree_root = new TreeNode<T>(value);
+            tree_root = new TreeNode<T>(val);
             return;
         }
 
         TreeNode<T>* tmp = tree_root;
         while(tmp != nullptr)
         {
-            if(value > tmp->value){
+            if(val > tmp->value){
                 if(tmp->right == nullptr)
                 {
-                    tmp->right = new TreeNode<T>(value);
+                    tmp->right = new TreeNode<T>(val);
                     return;
                 }
                 else tmp = tmp->right;
             }
-            else if(value < tmp->value){
+            else if(val < tmp->value){
                 if(tmp->left == nullptr)
                 {
-                    tmp->left = new TreeNode<T>(value);
+                    tmp->left = new TreeNode<T>(val);
                     return;
                 }
                 else tmp = tmp->left;
             }
-            else break;  // Don't allow duplicates. Break in case there is more to be executed.
+            else {
+                throw std::underflow_error("Duplicates aren't allowed.");
+                return;
+            }  // Don't allow duplicates. Break in case there is more to be executed.
         }
     }
-    void insertRecursive(const T& value){
-        tree_root = insertRecursiveHelper(tree_root, value);
+    void insertRecursive(const T& val){
+        tree_root = insertRecursiveHelper(val,tree_root);
     }
     
     void eraseRecursive(const T& val){
         tree_root = eraseRecursiveHelper(val, tree_root);
     }
-    TreeNode<T>* eraseRecursiveHelper(const T& val, TreeNode<T>* root){
-        if(root == nullptr) return nullptr;
-
-        if(val > root->value){
-            root->right = eraseRecursiveHelper(val, root->right);
-        }
-        else if(val < root->value){
-            root->left = eraseRecursiveHelper(val, root->left);
-        }
-        else{
-            if(root->left == nullptr && root->right == nullptr){
-                delete root;
-                return nullptr;
-            }
-            if(root->right == nullptr){
-                TreeNode<T>* tmp = root->left;
-                delete root;
-                return tmp;
-            }
-            if(root->left == nullptr){
-                TreeNode<T>* tmp = root->right;
-                delete root;
-                return tmp;
-            }
-
-            TreeNode<T>* min = findMinNode(root->right);
-            root->value = min->value;
-            root->right = eraseRecursiveHelper(root->value, root->right);
-        }
-        
-        return root;
-    }
+   
     void eraseIterative(const T& val){
         if (isEmpty()) {
             throw std::underflow_error("Cannot erase from an empty tree.");
@@ -88,15 +62,14 @@ public:
         // The easiest case is deleting a leaf node.
         TreeNode<T>* prev = nullptr;
         TreeNode<T>* curr = tree_root;
-        T value = val; // This might change.
 
         while(curr != nullptr){
 
-            if(value < curr->value){
+            if(val < curr->value){
                 prev = curr;
                 curr = curr->left;
             }
-            else if(value > curr->value){
+            else if(val > curr->value){
                 prev = curr;
                 curr = curr->right;
             }
@@ -144,26 +117,78 @@ public:
                 // Root is handled here. It'll just get replaced as in case of both, so no other checks need to be made.
                 TreeNode<T>* min = findMinNode(curr->right);
                 curr->value = min->value;
-                value = min->value;
+                val = min->value;
                 prev = curr;
                 curr = curr->right;  // Let's find the minimum node and delete it.   
             }
         }
     }
-
+    
+    TreeNode<T>* findMinNodeIterative(){
+        TreeNode<T>* tmp = tree_root;
+        while(tmp != nullptr && tmp->left != nullptr){
+            tmp = tmp->left;
+        }
+        return tmp;
+    }
+    TreeNode<T>* findMinNodeRecursive(){
+        findMinNodeRecursiveHelper(tree_root);
+    }
+    TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root){
+        if(root == nullptr)
+            return nullptr;
+        if(root->left == nullptr){
+            return root;
+        }
+        
+        return findMinNodeRecursiveHelper(root->left);
+    }
 private:
-    TreeNode<T>* insertRecursiveHelper(TreeNode<T>* root, const T& value){ 
+    TreeNode<T>* insertRecursiveHelper(const T& val,TreeNode<T>* root){ 
         // Or you can pass a pointer by reference without returning the root each time.
         if(root == nullptr){
-           return new TreeNode<T>(value);
+           return new TreeNode<T>(val);
         }
-        if(value < root->value){
-            root->left = insertRecursiveHelper(root->left, value);
+        if(val < root->value){
+            root->left = insertRecursiveHelper(val,root->left);
         }
-        else if(value > root->value){
-            root->right = insertRecursiveHelper(root->right, value);
+        else if(val > root->value){
+            root->right = insertRecursiveHelper(val,root->right);
         }
 
+        return root;
+    }
+    
+    TreeNode<T>* eraseRecursiveHelper(const T& val, TreeNode<T>* root){
+        if(root == nullptr) return nullptr;
+
+        if(val > root->value){
+            root->right = eraseRecursiveHelper(val, root->right);
+        }
+        else if(val < root->value){
+            root->left = eraseRecursiveHelper(val, root->left);
+        }
+        else{
+            if(root->left == nullptr && root->right == nullptr){
+                delete root;
+                return nullptr;
+            }
+            if(root->right == nullptr){
+                TreeNode<T>* tmp = root->left;
+                delete root;
+                return tmp;
+            }
+            if(root->left == nullptr){
+                TreeNode<T>* tmp = root->right;
+                delete root;
+                return tmp;
+            }
+
+            TreeNode<T>* min = findMinNode(root->right);
+            root->value = min->value;
+            root->right = eraseRecursiveHelper(min->val, root->right);
+        }
+        
         return root;
     }
 
