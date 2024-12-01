@@ -3,11 +3,11 @@ struct TreeNode{
 public:
     TreeNode(T v,TreeNode<T>* l = nullptr,TreeNode<T>* r = nullptr)
     : value(v)
-    , left_child(l)
-    , right_child(r)
+    , left(l)
+    , right(r)
     {};
 private:
-    TreeNode<T>* left_child;
-    TreeNode<T>* right_child;
+    TreeNode<T>* left;
+    TreeNode<T>* right;
     T value;
 };
