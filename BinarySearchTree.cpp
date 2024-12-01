@@ -89,8 +89,8 @@ public:
                     return;
                 }
                 if(curr->right == nullptr){ // Means curr->left isn't null because the previous condition would have been true.
-                    if(prev == nullptr){ // We need to delete the root.
-                        tree_root = nullptr;
+                    if(prev == nullptr){
+                        tree_root = curr->left; //if we need to delete the root that happens to have a left child
                     }
                     else if(curr->value < prev->value){
                         prev->left = curr->left;
@@ -104,8 +104,8 @@ public:
                     return;
                 } 
                 if(curr->left == nullptr){
-                    if(prev == nullptr){ // We need to delete the root.
-                        tree_root = nullptr;
+                    if(prev == nullptr){
+                        tree_root = curr->right;
                     }
                     else if(curr->value > prev->value){
                         prev->right = curr->right;
@@ -115,7 +115,7 @@ public:
                     }
                 }
                 // Root is handled here. It'll just get replaced as in case of both, so no other checks need to be made.
-                TreeNode<T>* min = findMinNode(curr->right);
+                TreeNode<T>* min = findMinNodeIterative(curr->right);
                 curr->value = min->value;
                 val = min->value;
                 prev = curr;
@@ -184,7 +184,7 @@ private:
                 return tmp;
             }
 
-            TreeNode<T>* min = findMinNode(root->right);
+            TreeNode<T>* min = findMinNodeRecursive(root->right);
             root->value = min->value;
             root->right = eraseRecursiveHelper(min->val, root->right);
         }
