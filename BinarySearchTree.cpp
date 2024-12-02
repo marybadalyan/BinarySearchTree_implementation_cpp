@@ -120,7 +120,28 @@ public:
             }
         }
     }
-    
+
+    TreeNode<T>* findMaxRecursive(){
+        return findMaxNodeRecursiveHelper(tree_root);
+    }
+private:
+    TreeNode<T>* findMaxNodeIterative(){
+        TreeNode<T>* tmp = tree->root;
+        while(tmp && tmp->right){
+            tmp =  tmp->right;
+        }
+        return tmp;
+    }
+    TreeNode<T>* findMaxNodeRecursiveHelper(TreeNode<T>* root){
+        if(root == nullptr) {
+            return nullptr; //if not checked will return a segmentation fault on line 136
+        }
+        if(root->right == nullptr){
+            return root;
+        }
+
+        return findMaxNodeRecursiveHelper(root->right);
+    }
     TreeNode<T>* findMinNodeIterative(){
         TreeNode<T>* tmp = tree_root;
         while(tmp && tmp->left){
@@ -128,19 +149,11 @@ public:
         }
         return tmp;
     }
+    
     TreeNode<T>* findMinNodeRecursive(){
         return findMinNodeRecursiveHelper(tree_root);
     }
-    TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root){
-        if(root == nullptr)
-            return nullptr;
-        if(root->left == nullptr){
-            return root;
-        }
-        
-        return findMinNodeRecursiveHelper(root->left);
-    }
-private:
+
     TreeNode<T>* insertRecursiveHelper(const T& val,TreeNode<T>* root){ 
         // Or you can pass a pointer by reference without returning the root each time.
         if(root == nullptr){
@@ -189,8 +202,16 @@ private:
         return root;
     }
 
+    TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root){
+        if(root == nullptr)
+            return nullptr;
+        if(root->left == nullptr){
+            return root;
+        }
+        
+        return findMinNodeRecursiveHelper(root->left);
+    }
 private:
     TreeNode<T>* tree_root;
 };
-
 
