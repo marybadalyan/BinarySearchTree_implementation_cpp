@@ -10,7 +10,9 @@ class BinarySearchTree{
 public:
     BinarySearchTree(TreeNode<T>* r = nullptr): tree_root(r){}
 
-    ~BinarySearchTree(){}
+    ~BinarySearchTree(){
+        clearRecursive();
+    }
 
     bool isEmpty() const{
         return tree_root == nullptr;
@@ -199,6 +201,19 @@ public:
         }
     }
    
+    void clearRecursive(){
+        clearRecursiveHelper(tree_root);
+        tree_root = nullptr;
+    }
+    void clearRecursiveHelper(TreeNode<T>* root){
+        if(!root) return;
+
+        clearRecursiveHelper(root->left);
+        clearRecursiveHelper(root->right);
+
+        delete root;
+        root = nullptr;
+    }
     void preorderRecursive() const{
         preorderRecursive(tree_root);
     }
@@ -358,8 +373,6 @@ int main(){
 }
 
 
-// 	void levelorder() const;
-
 // 	int countOfNodesR() const;
 // 	int countOfLeavesR() const;
 
@@ -368,10 +381,6 @@ int main(){
 
 // 	int widthI() const;
 // 	int widthR() const;
-
-// 	void clearR();
-
-// private:
 
 // 	Node<T>* findR(Node<T>* p, const T& data) const;
 // 	Node<T>* findI(const T& data) const;
@@ -384,5 +393,5 @@ int main(){
 // 	int widthHelper(Node<T>* p, int i) const;
 
 
-// 	void clearHelper(Node<T>* p);
+
 
