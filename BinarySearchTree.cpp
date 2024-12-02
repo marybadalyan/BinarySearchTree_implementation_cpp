@@ -201,6 +201,33 @@ public:
         }
     }
    
+    int heightRecursive(){
+        return heightRecursiveHelper(tree_root);
+    }
+    int heightIterative(){
+        std::queue<TreeNode<T>*> q;
+        int height = 0;
+        q.push(tree_root);
+
+        int levelSize = q.size();
+
+        while(!q.empty()){
+
+            for(int i = 0; i < levelSize;++i){
+                TreeNode<T>* tmp = q.front();
+                q.pop();
+
+                if(tmp->left){
+                    q.push(tmp->left);
+                }
+                if(tmp->right){
+                    q.push(tmp->right);
+                }
+            }
+            ++height; 
+        }
+        return height;
+    }
     void clearRecursive(){
         clearRecursiveHelper(tree_root);
         tree_root = nullptr;
@@ -250,15 +277,20 @@ public:
     }
 
 private:
+    int heightRecursiveHelper(TreeNode<T>* root){
+        if(!root) return 0;
+
+        return 1 + max(heightRecursiveHelper(root->left),heightRecursiveHelper(root->right));
+    }
     int countOfNodesRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return 0;
 
         return 1 + countOfNodesRecursiveHelper(root->left) + countOfNodesRecursiveHelper(root->right);
     }
-    
+
     int countOfLeavesRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return 0;
-        if(!root-left && !root->right) return  1;
+        if(!root->left && !root->right) return  1;
         
         return countOfLeavesRecursiveHelper(root->left) + countOfLeavesRecursiveHelper(root->right);
     }
@@ -381,20 +413,17 @@ int main(){
 
     tree->insertIterative(13);
     tree->insertIterative(15);
-    tree->eraseRecursive(15);
     tree->insertIterative(9);
     tree->insertIterative(12);
     tree->insertIterative(11);
     tree->insertIterative(5);
 
-    tree->levelorderIterative();
+  
+    std:: cout<< tree->heightIterative();
 }
+//  countOfNodesIterative 
+//  coutn of nodes iterative 
 
-
-// 	int countOfNodesR() const;
-
-// 	int heightR() const;
-// 	int heightI() const;
 
 // 	int widthI() const;
 // 	int widthR() const;
