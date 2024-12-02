@@ -278,7 +278,7 @@ public:
     int countOfNodesIterative(){
         if(isEmpty()) return 0;
 
-        int count = 1;
+        int count = 0;
         std::queue<TreeNode<T>*> q;
         q.push(tree_root);
         while(!q.empty()){
@@ -295,7 +295,31 @@ public:
         }
         return count;
     }
+    int countOfLeavesIterative(){
+        if(isEmpty()) return 0;
+        std::stack<TreeNode<T>*> s;
+        int count = 0;
+        
+        s.push(tree_root);
 
+        while(!s.empty()){
+            TreeNode<T>* tmp = s.top();
+            s.pop();
+
+
+            if(!tmp->left && !tmp->right){
+                ++count;
+            }
+
+            if(tmp->left){
+                s.push(tmp->left);
+            }
+            if(tmp->right){
+                s.push(tmp->right)
+            }
+        }
+        return count;
+    }
 private:
     int heightRecursiveHelper(TreeNode<T>* root){
         if(!root) return 0;
@@ -442,8 +466,8 @@ int main(){
   
     std:: cout<< tree->countOfNodesIterative();
 }
-//  countOfNodesIterative 
-//  coutn of leaves iterative 
+
+
 //  clear iterative
 // 	int widthI() const;
 // 	int widthR() const;
