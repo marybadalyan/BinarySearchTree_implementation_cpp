@@ -245,6 +245,16 @@ public:
     int countOfLeavesRecursive() const{
         return countOfLeavesRecursiveHelper(tree_root);
     }
+    int countOfNodesRecursive() const{
+        return countOfNodesRecursiveHelper(tree_root);
+    }
+
+private:
+    int countOfNodesRecursiveHelper(TreeNode<T>* root) const{
+        if(!root) return 0;
+
+        return 1 + countOfNodesRecursiveHelper(root->left) + countOfNodesRecursiveHelper(root->right);
+    }
     
     int countOfLeavesRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return 0;
@@ -252,7 +262,6 @@ public:
         
         return countOfLeavesRecursiveHelper(root->left) + countOfLeavesRecursiveHelper(root->right);
     }
-private:
     void inorderRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return;
 
@@ -383,7 +392,6 @@ int main(){
 
 
 // 	int countOfNodesR() const;
-// 	int countOfLeavesR() const;
 
 // 	int heightR() const;
 // 	int heightI() const;
