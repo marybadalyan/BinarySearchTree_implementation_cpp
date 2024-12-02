@@ -3,7 +3,7 @@
 #include "TreeNode.h"
 
 #include "stack"
-
+#include "queue"
 template <typename T>
 class BinarySearchTree{
 
@@ -12,7 +12,7 @@ public:
 
     ~BinarySearchTree(){}
 
-    bool isEmpty(){
+    bool isEmpty() const{
         return tree_root == nullptr;
     }
     void insertIterative(const T& val){
@@ -123,10 +123,10 @@ public:
         }
     }
 
-    TreeNode<T>* findMaxRecursive(){
+    TreeNode<T>* findMaxRecursive() const{
         return findMaxNodeRecursiveHelper(tree_root);
     }
-    void preorederIterative(){
+    void preorederIterative() const{
         if(isEmpty()) return;
         std::stack<TreeNode<T>*> s;
         TreeNode<T>* tmp = tree_root;
@@ -146,7 +146,7 @@ public:
             s.pop();
         }
     }
-    void inorderIterative(){
+    void inorderIterative() const{
         if(isEmpty()) return;
 
         std::stack<TreeNode<T>*> s;
@@ -157,19 +157,21 @@ public:
                 tmp = tmp->left;
             }
 
-            if(stack.empty()) return;
+            if(s.empty()) return;
 
-            tmp = stack.top();
-            stack.pop();
+            tmp = s.top();
+            s.pop();
             std::cout << tmp->value << " ";
             tmp = tmp->right;  //line 156 will be  pushing it to the stack  
         }
     }
-    void postorderIterative(){
+    void postorderIterative() const{
         if(isEmpty()) return;
+
         std::stack<TreeNode<T>*> s;
         TreeNode<T>* tmp = tree_root;
         while(true){
+
             while(tmp){
 
                 if(tmp->right){
@@ -184,7 +186,8 @@ public:
 
             tmp = s.top();
             s.pop();
-            if(tmp->right && !isEmpty() && s.top() == tmp->right){
+
+            if(tmp->right && !s.empty() && s.top() == tmp->right){
                 s.pop();
                 s.push(tmp);
                 tmp = tmp->right;
@@ -196,25 +199,44 @@ public:
         }
     }
    
-    void preorderRecursive(){
+    void preorderRecursive() const{
         preorderRecursive(tree_root);
     }
-    void postorederRecursive(){
+    void postorederRecursive() const{
         postorederRecursiveHelper(tree_root);
     }
     
-    void inorderRecursive(){
+    void inorderRecursive() const{
         inorderRecursiveHelper(tree_root);
     }
+
+    void levelorderIterative() const{
+        std::queue<TreeNode<T>*> q;
+
+        q.push(tree_root);
+        while(!q.empty()){
+            TreeNode<T>* tmp = q.front();
+            q.pop();
+            std::cout << tmp->value << " ";
+
+            if(tmp->left){
+                q.push(tmp->left);
+            }
+            if(tmp->right){
+                q.push(tmp->right);
+            }
+        }
+    }
+
 private:
-    void inorderRecursiveHelper(TreeNode<T>* root){
+    void inorderRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return;
-        
+
         inorderRecursiveHelper(root->left);
         std::cout << root->value << " ";
         inorderRecursiveHelper(root->right);
     }
-    void postorederRecursiveHelper(TreeNode<T>* root){
+    void postorederRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return;
 
         postorederRecursiveHelper(root->left);
@@ -222,21 +244,21 @@ private:
         std::cout << root->value << " ";
     }
 
-    void preorderRecursiveHelper(TreeNode<T>* root){
+    void preorderRecursiveHelper(TreeNode<T>* root) const{
         if (!root) return;
         std::cout << root->value <<" ";
         preorderRecursiveHelper(root->left);
         preorderRecursiveHelper(root->right);
     }
 
-    TreeNode<T>* findMaxNodeIterative(){
-        TreeNode<T>* tmp = tree->root;
+    TreeNode<T>* findMaxNodeIterative() const{
+        TreeNode<T>* tmp = tree_root;
         while(tmp && tmp->right){
             tmp =  tmp->right;
         }
         return tmp;
     }
-    TreeNode<T>* findMaxNodeRecursiveHelper(TreeNode<T>* root){
+    TreeNode<T>* findMaxNodeRecursiveHelper(TreeNode<T>* root) const{
         if(root == nullptr) {
             return nullptr; //if not checked will return a segmentation fault on line 136
         }
@@ -246,7 +268,7 @@ private:
 
         return findMaxNodeRecursiveHelper(root->right);
     }
-    TreeNode<T>* findMinNodeIterative(){
+    TreeNode<T>* findMinNodeIterative() const{
         TreeNode<T>* tmp = tree_root;
         while(tmp && tmp->left){
             tmp = tmp->left;
@@ -254,12 +276,12 @@ private:
         return tmp;
     }
     
-    TreeNode<T>* findMinNodeRecursive(){
+    TreeNode<T>* findMinNodeRecursive() const{
         return findMinNodeRecursiveHelper(tree_root);
     }
 
     TreeNode<T>* insertRecursiveHelper(const T& val,TreeNode<T>* root){ 
-        // Or you can pass a pointer by reference without returning the root each time.
+        // Or you can pass a pointer by reference without returning the  root each time.
         if(root == nullptr){
            return new TreeNode<T>(val);
         }
@@ -306,7 +328,7 @@ private:
         return root;
     }
 
-    TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root){
+    TreeNode<T>* findMinNodeRecursiveHelper(TreeNode<T>* root) const{
         if(root == nullptr)
             return nullptr;
         if(root->left == nullptr){
@@ -321,15 +343,19 @@ private:
 
 
 
+int main(){
+    BinarySearchTree<int>* tree = new BinarySearchTree<int>();
 
+    tree->insertIterative(13);
+    tree->insertIterative(15);
+    tree->eraseRecursive(15);
+    tree->insertIterative(9);
+    tree->insertIterative(12);
+    tree->insertIterative(11);
+    tree->insertIterative(5);
 
-// 	void inorderR() const;
-// 	void preorderR() const;
-// 	void postorderR() const;
-
-// 	void preorderI() const;
-// 	void inorderI() const;
-// 	void postorderI() const;
+    tree->levelorderIterative();
+}
 
 
 // 	void levelorder() const;
@@ -350,10 +376,6 @@ private:
 // 	Node<T>* findR(Node<T>* p, const T& data) const;
 // 	Node<T>* findI(const T& data) const;
 
-
-// 	void inorderHelper(Node<T>* p) const;
-// 	void preorderHelper(Node<T>* p) const;
-// 	void postorderHelper(Node<T>* p) const;
 
 // 	int countOfNodesHelper(Node<T>* p) const;
 // 	int countOfLeavesHelper(Node<T>* p) const;
