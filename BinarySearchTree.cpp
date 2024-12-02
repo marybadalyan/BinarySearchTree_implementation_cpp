@@ -196,7 +196,39 @@ public:
         }
     }
    
+    void preorderRecursive(){
+        preorderRecursive(tree_root);
+    }
+    void postorederRecursive(){
+        postorederRecursiveHelper(tree_root);
+    }
+    
+    void inorderRecursive(){
+        inorderRecursiveHelper(tree_root);
+    }
 private:
+    void inorderRecursiveHelper(TreeNode<T>* root){
+        if(!root) return;
+        
+        inorderRecursiveHelper(root->left);
+        std::cout << root->value << " ";
+        inorderRecursiveHelper(root->right);
+    }
+    void postorederRecursiveHelper(TreeNode<T>* root){
+        if(!root) return;
+
+        postorederRecursiveHelper(root->left);
+        postorederRecursiveHelper(root->right);
+        std::cout << root->value << " ";
+    }
+
+    void preorderRecursiveHelper(TreeNode<T>* root){
+        if (!root) return;
+        std::cout << root->value <<" ";
+        preorderRecursiveHelper(root->left);
+        preorderRecursiveHelper(root->right);
+    }
+
     TreeNode<T>* findMaxNodeIterative(){
         TreeNode<T>* tmp = tree->root;
         while(tmp && tmp->right){
