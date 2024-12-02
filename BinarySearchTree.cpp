@@ -275,6 +275,26 @@ public:
     int countOfNodesRecursive() const{
         return countOfNodesRecursiveHelper(tree_root);
     }
+    int countOfNodesIterative(){
+        if(isEmpty()) return 0;
+
+        int count = 1;
+        std::queue<TreeNode<T>*> q;
+        q.push(tree_root);
+        while(!q.empty()){
+            TreeNode<T>* tmp =  q.front();
+            q.pop();
+            ++count; //we cannot increment using the level count of nodes cuz the q has  nodes form multiple levels
+
+            if(tmp->left){
+                q.push(tmp->left);
+            }
+            if(tmp->right){
+                q.push(tmp->right);
+            }
+        }
+        return count;
+    }
 
 private:
     int heightRecursiveHelper(TreeNode<T>* root){
@@ -294,6 +314,7 @@ private:
         
         return countOfLeavesRecursiveHelper(root->left) + countOfLeavesRecursiveHelper(root->right);
     }
+    
     void inorderRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return;
 
@@ -419,23 +440,14 @@ int main(){
     tree->insertIterative(5);
 
   
-    std:: cout<< tree->heightIterative();
+    std:: cout<< tree->countOfNodesIterative();
 }
 //  countOfNodesIterative 
-//  coutn of nodes iterative 
-
-
+//  coutn of leaves iterative 
+//  clear iterative
 // 	int widthI() const;
 // 	int widthR() const;
 
-// 	Node<T>* findR(Node<T>* p, const T& data) const;
-// 	Node<T>* findI(const T& data) const;
-
-
-// 	int countOfNodesHelper(Node<T>* p) const;
-// 	int countOfLeavesHelper(Node<T>* p) const;
-
-// 	int heightHelper(Node<T>* p) const;
 // 	int widthHelper(Node<T>* p, int i) const;
 
 
