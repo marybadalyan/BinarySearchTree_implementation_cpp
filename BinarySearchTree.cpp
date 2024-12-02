@@ -242,7 +242,16 @@ public:
             }
         }
     }
-
+    int countOfLeavesRecursive() const{
+        return countOfLeavesRecursiveHelper(tree_root);
+    }
+    
+    int countOfLeavesRecursiveHelper(TreeNode<T>* root) const{
+        if(!root) return 0;
+        if(!root-left && !root->right) return  1;
+        
+        return countOfLeavesRecursiveHelper(root->left) + countOfLeavesRecursiveHelper(root->right);
+    }
 private:
     void inorderRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return;
