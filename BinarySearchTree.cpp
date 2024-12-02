@@ -2,6 +2,8 @@
 #include <iostream>
 #include "TreeNode.h"
 
+#include "stack"
+
 template <typename T>
 class BinarySearchTree{
 
@@ -124,6 +126,76 @@ public:
     TreeNode<T>* findMaxRecursive(){
         return findMaxNodeRecursiveHelper(tree_root);
     }
+    void preorederIterative(){
+        if(isEmpty()) return;
+        std::stack<TreeNode<T>*> s;
+        TreeNode<T>* tmp = tree_root;
+        while(true){
+            while(tmp){
+                std::cout << tmp->val << " ";
+                if(tmp->right){
+                    s.push(tmp->right);
+                }
+                tmp = tmp->left;
+            }
+            if(s.empty()){
+                break;
+            }
+
+            tmp = s.top();
+            s.pop();
+        }
+    }
+    void inorderIterative(){
+        if(isEmpty()) return;
+
+        std::stack<TreeNode<T>*> s;
+        TreeNode<T>* tmp = tree_root;
+        while(true){
+            while(tmp){
+                s.push(tmp);
+                tmp = tmp->left;
+            }
+
+            if(stack.empty()) return;
+
+            tmp = stack.top();
+            stack.pop();
+            std::cout << tmp->value << " ";
+            tmp = tmp->right;  //line 156 will be  pushing it to the stack  
+        }
+    }
+    void postorderIterative(){
+        if(isEmpty()) return;
+        std::stack<TreeNode<T>*> s;
+        TreeNode<T>* tmp = tree_root;
+        while(true){
+            while(tmp){
+
+                if(tmp->right){
+                    s.push(tmp->right);
+                }
+                s.push(tmp);
+                tmp = tmp->left;
+
+            }
+
+            if(s.empty()) return;
+
+            tmp = s.top();
+            s.pop();
+            if(tmp->right && !isEmpty() && s.top() == tmp->right){
+                s.pop();
+                s.push(tmp);
+                tmp = tmp->right;
+            }
+            else{
+                std::cout << tmp->value << " ";
+                tmp = nullptr;
+            }
+        }
+    }
+   
 private:
     TreeNode<T>* findMaxNodeIterative(){
         TreeNode<T>* tmp = tree->root;
@@ -214,4 +286,49 @@ private:
 private:
     TreeNode<T>* tree_root;
 };
+
+
+
+
+
+// 	void inorderR() const;
+// 	void preorderR() const;
+// 	void postorderR() const;
+
+// 	void preorderI() const;
+// 	void inorderI() const;
+// 	void postorderI() const;
+
+
+// 	void levelorder() const;
+
+// 	int countOfNodesR() const;
+// 	int countOfLeavesR() const;
+
+// 	int heightR() const;
+// 	int heightI() const;
+
+// 	int widthI() const;
+// 	int widthR() const;
+
+// 	void clearR();
+
+// private:
+
+// 	Node<T>* findR(Node<T>* p, const T& data) const;
+// 	Node<T>* findI(const T& data) const;
+
+
+// 	void inorderHelper(Node<T>* p) const;
+// 	void preorderHelper(Node<T>* p) const;
+// 	void postorderHelper(Node<T>* p) const;
+
+// 	int countOfNodesHelper(Node<T>* p) const;
+// 	int countOfLeavesHelper(Node<T>* p) const;
+
+// 	int heightHelper(Node<T>* p) const;
+// 	int widthHelper(Node<T>* p, int i) const;
+
+
+// 	void clearHelper(Node<T>* p);
 
