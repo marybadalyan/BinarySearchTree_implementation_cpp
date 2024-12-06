@@ -299,7 +299,7 @@ public:
         if(isEmpty()) return 0;
         std::stack<TreeNode<T>*> s;
         int count = 0;
-        
+
         s.push(tree_root);
 
         while(!s.empty()){
@@ -320,7 +320,29 @@ public:
         }
         return count;
     }
+    int widthRecursive() const{
+        const int height = heightIterative();
+        int width = 0;
+        for(int i = 0;i <= height;++i){
+            const int tmp = widthRecursive(root,i);
+            if(tmp > width){
+                width = tmp;
+            }
+        }
+        return width;
+    }
 private:
+    int widthRecursiveHelper const(TreeNode<T>* root,int level){
+
+        if(!root){
+            return 0;
+        }
+        if(level == 0){
+            return 1;
+        }
+        return widthRecursive(root->left,level - 1) + widthRecursive(root->right,level - 1);
+    }
+
     int heightRecursiveHelper(TreeNode<T>* root){
         if(!root) return 0;
 
@@ -466,14 +488,5 @@ int main(){
   
     std:: cout<< tree->countOfNodesIterative();
 }
-
-
-//  clear iterative
-// 	int widthI() const;
-// 	int widthR() const;
-
-// 	int widthHelper(Node<T>* p, int i) const;
-
-
 
 
