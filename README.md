@@ -29,3 +29,9 @@ that includes:
 - inorderRecursiveHelper
 - postorederRecursiveHelper
 - preorderRecursiveHelper
+
+To do 
+-clearIterative
+-widthRecursive
+-widthRecursiveHelper
+
