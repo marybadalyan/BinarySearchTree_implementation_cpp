@@ -29,9 +29,12 @@ that includes:
 - inorderRecursiveHelper
 - postorederRecursiveHelper
 - preorderRecursiveHelper
+- widthRecursive
+- widthRecursiveHelper
+- widthIterative
+
 
 To do 
 -clearIterative
--widthRecursive
--widthRecursiveHelper
+
 
