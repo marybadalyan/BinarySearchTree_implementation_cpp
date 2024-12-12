@@ -125,6 +125,25 @@ public:
         }
     }
 
+    void clearIterative(){
+        if(isEmpty()) return;
+
+        std::queue<TreeNode<T>*> q;
+        q.push(tree_root);
+
+        while(!q.empty()){
+            TreeNode<T>* tmp = q.front();
+            q.pop();
+            if(tmp->left)
+                q.push(tmp->left);
+            if(tmp->right)
+                q.push(tmp->left);
+
+            delete tmp;
+            tmp = nullptr;
+        }
+        tree_root = nullptr;
+    }
     TreeNode<T>* findMaxRecursive() const{
         return findMaxNodeRecursiveHelper(tree_root);
     }
