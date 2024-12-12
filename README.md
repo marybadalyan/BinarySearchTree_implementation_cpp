@@ -33,5 +33,12 @@ that includes:
 - widthRecursiveHelper
 - widthIterative
 - clearIterative
+- findMax
+- findMin
 
+To Do 
+- isBalanced
+- isFull
+- isComplete
+- Find K-th Smallest/Largest
 
