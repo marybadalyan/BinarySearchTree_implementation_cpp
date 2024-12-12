@@ -29,9 +29,16 @@ that includes:
 - inorderRecursiveHelper
 - postorederRecursiveHelper
 - preorderRecursiveHelper
+- widthRecursive
+- widthRecursiveHelper
+- widthIterative
+- clearIterative
+- findMax
+- findMin
 
-To do 
--clearIterative
--widthRecursive
--widthRecursiveHelper
+To Do 
+- isBalanced
+- isFull
+- isComplete
+- Find K-th Smallest/Largest
 
