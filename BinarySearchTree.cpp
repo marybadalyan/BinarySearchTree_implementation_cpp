@@ -315,38 +315,55 @@ public:
                 s.push(tmp->left);
             }
             if(tmp->right){
-                s.push(tmp->right)
+                s.push(tmp->right);
             }
         }
         return count;
     }
-    int widthRecursive() const{
-        const int height = heightIterative();
+    int widthRecursive(){
         int width = 0;
-        for(int i = 0;i <= height;++i){
-            const int tmp = widthRecursive(root,i);
-            if(tmp > width){
-                width = tmp;
+        int height = heightIterative();
+        for(int i = 1; i <= height; ++i){
+            width = std::max(width,widthRecursiveHelper(tree_root,i));
+        }
+        return width;
+    }
+    int widthIterative(){
+        if (isEmpty()) return 0;
+
+        int height = heightRecursive();
+        int width = 0;
+        std::queue<TreeNode<T>*> q;
+        q.push(tree_root);
+        for(int i = 0; i < height; ++i){
+            int size = q.size();
+
+            for(int j = 0; j < size;++j){
+                TreeNode<T>* tmp = q.front();
+                q.pop();
+                if(tmp->left)
+                    q.push(tmp->left);
+                if(tmp->right)
+                    q.push(tmp->right);
             }
+            width = std::max(width,size);
         }
         return width;
     }
 private:
-    int widthRecursiveHelper const(TreeNode<T>* root,int level){
-
-        if(!root){
+    int widthRecursiveHelper(TreeNode<T>* root,int level){
+        if(!root)
             return 0;
-        }
-        if(level == 0){
-            return 1;
-        }
-        return widthRecursive(root->left,level - 1) + widthRecursive(root->right,level - 1);
-    }
 
+        if(level == 1) 
+            return 1;
+    
+        return widthRecursiveHelper(root->left,level-1) + widthRecursiveHelper(root->right,level-1);
+    } 
     int heightRecursiveHelper(TreeNode<T>* root){
         if(!root) return 0;
 
-        return 1 + max(heightRecursiveHelper(root->left),heightRecursiveHelper(root->right));
+        return 1 + std::max(heightRecursiveHelper(root->left),heightRecursiveHelper(root->right));
     }
     int countOfNodesRecursiveHelper(TreeNode<T>* root) const{
         if(!root) return 0;
@@ -487,6 +504,10 @@ int main(){
 
   
     std:: cout<< tree->countOfNodesIterative();
+
+    std::cout << tree->widthRecursive();
+    std::cout << tree->widthIterative();
+
 }
 
 
