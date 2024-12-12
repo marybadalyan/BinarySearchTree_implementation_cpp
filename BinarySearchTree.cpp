@@ -56,6 +56,12 @@ public:
         tree_root = eraseRecursiveHelper(val, tree_root);
     }
    
+    int findMax(){
+        return findMaxNodeIterative()->value;
+    }
+    int findMin(){
+        return findMinNodeIterative()->value;
+    }
     void eraseIterative(const T& val){
         if (isEmpty()) {
             throw std::underflow_error("Cannot erase from an empty tree.");
@@ -144,6 +150,7 @@ public:
         }
         tree_root = nullptr;
     }
+    
     TreeNode<T>* findMaxRecursive() const{
         return findMaxNodeRecursiveHelper(tree_root);
     }
