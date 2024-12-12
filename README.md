@@ -32,9 +32,6 @@ that includes:
 - widthRecursive
 - widthRecursiveHelper
 - widthIterative
-
-
-To do 
--clearIterative
+- clearIterative
 
 
